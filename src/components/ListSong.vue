@@ -7,7 +7,7 @@
         </div>
         <div class="boxList">
             <div class="ListSong" v-for="(itemA, index) in item.song" :key="'b' + index">
-                <div class="infor-song1" @click="PlayMusic(itemA)">
+                <div class="infor-song1" @click="PlayMusic(itemA, index)">
                     <img :src="itemA.thumbnail" alt="" width="100" height="100">
                     <div class="detail">
                         <div class="nameSong">
@@ -95,14 +95,27 @@ export default {
                     ]
                 }
             ],
-            listNow: []
+            listNow: [],
+            indexSongActive: 0
         }
     },
     created() {
         this.id = this.$route.params.id;
     },
     methods: {
-        PlayMusic(item){
+        PlayMusic(item, index) {
+            var selectorListSong = document.querySelectorAll(".ListSong");
+
+            for (var id in selectorListSong) {
+                if (id == this.indexSongActive) {
+                    selectorListSong[id].classList.remove("active");
+                }
+            }
+            for (let key in selectorListSong) {
+                if (key == index) selectorListSong[index].classList.add("active");
+                this.indexSongActive = index;
+            }
+
             this.$store.commit("currentSong", item);
             localStorage.setItem("currentSong", item.stream);
         }
@@ -111,6 +124,7 @@ export default {
         "id": function () {
             this.listSong.filter(item => {
                 if (item.id == this.id) {
+                    this.$store.commit("ListNow", item);
                     return this.listNow.push(item);
                 }
             })
@@ -149,9 +163,11 @@ export default {
     padding-top: 15px;
     font-weight: 600;
 }
+
 .boxList {
     width: 100%;
 }
+
 .ListSong {
     width: 90%;
     display: flex;
@@ -168,6 +184,10 @@ export default {
     border-radius: 5px;
     background-color: #ffffff1f;
     transition: all 1 ease-in-out;
+}
+
+.ListSong.active {
+    background-color: #ffffff1f;
 }
 
 .ListSong img {

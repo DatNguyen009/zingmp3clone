@@ -36,7 +36,7 @@
 }
 
 .jss1_logo {
-    padding: 10px 27px;
+    padding: 15px 27px;
     display: flex;
 }
 

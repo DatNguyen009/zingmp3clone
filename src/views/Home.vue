@@ -7,7 +7,7 @@
                 <div class="jss2_boxSearch">
                     <div class="boxSearch_general">
                         <div class="boxSearch_general--path">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                            <svg @click="PrevPage()" :class="this.$route.name != 'Home' ? 'active':'' " xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
@@ -202,6 +202,7 @@
                 </div>
                 <router-view></router-view>
             </div>
+            <right-nav />
         </div>
     </div>
     <div class="boxplayer">
@@ -281,7 +282,7 @@
                         </div>
                     </div>
                     <div class="button-note">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note-list" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note-list" viewBox="0 0 16 16" @click="playListNow()">
                             <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z" />
                             <path fill-rule="evenodd" d="M12 3v10h-1V3h1z" />
                             <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z" />
@@ -299,6 +300,7 @@
 <script>
 // @ is an alias to /src
 import LeftNav from '@/components/layout/LeftNav.vue'
+import RightNav from '@/components/layout/RightNav.vue'
 export default {
     name: 'Home',
     data() {
@@ -317,6 +319,7 @@ export default {
             loop: false,
             drag: false,
             volunmPercentage: 0,
+            listNow: false
         }
     },
     mounted() {
@@ -328,6 +331,7 @@ export default {
         }
     },
     methods: {
+
         playAudio() {
             var x = document.getElementById("audio");
             if (this.currentlyPlaying == false) {
@@ -369,9 +373,8 @@ export default {
                 1000
             );
 
-            if (this.currentTime == this.trackDuration) {
+            if (this.currentTime == this.trackDuration)
                 this.nextSong();
-            }
 
         },
         mouseDown(event) {
@@ -403,9 +406,8 @@ export default {
                 var pause = document.querySelector(".bi.bi-pause-circle");
                 var x = document.getElementById("audio");
 
-                if (pause.style.display == "block") {
+                if (pause.style.display == "block")
                     x.play();
-                }
 
             }, 500);
         },
@@ -416,12 +418,27 @@ export default {
                 var x = document.getElementById("audio");
 
                 if (pause.style.display == "block") {
-
                     x.load();
                     x.play();
                 }
 
             }, 500);
+        },
+        playListNow() {
+            var jss5 = document.querySelector(".jss5");
+            if (this.listNow != true) {
+                jss5.style.right = 0;
+                this.listNow = true;
+            } else {
+                jss5.style.right = '-320px';
+                this.listNow = false;
+            }
+
+        },
+        PrevPage(){
+            if (this.$route.name != 'Home') {
+                this.$router.go(-1);   
+            }
         }
     },
     watch: {
@@ -448,9 +465,8 @@ export default {
                 var pause = document.querySelector(".bi.bi-pause-circle");
                 var x = document.getElementById("audio");
 
-                if (pause.style.display == "block") {
+                if (pause.style.display == "block")
                     x.play();
-                }
 
             }, 500);
 
@@ -460,15 +476,20 @@ export default {
         }
     },
     components: {
-        'left-nav': LeftNav
+        'left-nav': LeftNav,
+        'right-nav': RightNav,
     }
 }
 </script>
 
 <style>
 .button-note {
-    width: 30%;
-    padding: 10% 0;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    background-color: #e3dede1f;
+    border-radius: 3px;
+    margin: 1.7rem 0px;
 }
 
 .bi.bi-volume-up {
@@ -480,7 +501,7 @@ export default {
 .boxVolunm {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .button-sound {
@@ -694,6 +715,11 @@ export default {
     width: 28px;
     height: 45px;
     margin-right: 12px;
+    cursor: pointer;
+}
+
+.bi.bi-arrow-left.active{
+    color: white;
 }
 
 .boxSearch_general--input input {
@@ -831,5 +857,11 @@ h6 {
     width: 2rem;
     fill: white;
     margin: 4rem 1rem;
+}
+
+.bi.bi-music-note-list {
+    width: 18px;
+    height: 30px;
+    cursor: pointer;
 }
 </style>

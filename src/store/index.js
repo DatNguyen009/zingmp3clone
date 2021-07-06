@@ -78,20 +78,15 @@ export default new Vuex.Store({
         ],
       },
     ],
-    indexSong: 0
+    indexSong: 0,
+    listNow: []
   },
   getters:{
-    getCurrentSong(state){
-      state.listSong.forEach(item => {
-        if (item.id != state.id) {
-          return "dat nguyen";
-        }else{
-          return "a";
-        }
-      })
-    }
   },
   mutations: {
+    ListNow(state, data){
+      state.listNow = data;
+    },
     currentSong(state, data) {
       state.currentSong = data;
     },
